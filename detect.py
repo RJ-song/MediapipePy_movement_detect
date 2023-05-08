@@ -19,7 +19,7 @@ def export_landmarks(results, action) :
            keypoints = np.array([[res.x, res.y, res.z, res.visibility] for res in results.pose_landmarks.landmark]).flatten().tolist()
            keypoints.insert(0,action)
            
-           with open('output.csv', mode='a',newline='') as f:
+           with open('outputs/pushups.csv', mode='a',newline='') as f:
                csv_writer=csv.writer(f,delimiter=',', quotechar='"', quoting = csv.QUOTE_MINIMAL)
                csv_writer.writerow(keypoints)
         except Exception as e:

@@ -48,3 +48,8 @@ for algo, model in fit_models.items():
           recall_score(y_test.values, yhat, average= "binary", pos_label="up")
           )
 yhat=fit_models['rf'].predict(X_test)
+print(yhat[:10])
+print(y_test)
+
+# with open('models/pushup_front.pkl', 'wb') as f:
+#     pickle.dump(fit_models['rf'],f)

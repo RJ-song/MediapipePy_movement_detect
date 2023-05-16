@@ -37,7 +37,7 @@ for algo, pipeline in pipelines.items():
     
 #fit_models
 
-fit_models['rc'].predict(X_test)
+fit_models['rf'].predict(X_test)
 
 #-----evaluate & serialize model
 
@@ -51,5 +51,5 @@ yhat=fit_models['rf'].predict(X_test)
 print(yhat[:10])
 print(y_test)
 
-# with open('models/pushup_front.pkl', 'wb') as f:
-#     pickle.dump(fit_models['rf'],f)
+with open('models\pushup_front.pkl', 'wb') as f:
+    pickle.dump(fit_models['rf'],f)

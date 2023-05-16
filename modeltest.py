@@ -18,14 +18,16 @@ import csv
 
 mp_drawing = mp.solutions.drawing_utils
 mp_pose = mp.solutions.pose
-fieldnames = ['x', 'y', 'z', 'visibility']
 
-with open('models/pushup_front.pkl', 'rb') as f:
+with open('models\pushup_front.pkl', 'rb') as f:
     model = pickle.load(f)
     
+landmarks = ['class']
+for val in range(1,33+1):
+    landmarks += ['x{}'.format(val), 'y{}'.format(val), 'z{}'.format(val), 'v{}'.format(val),]
 # X = pd.DataFrame([row], columns = landmarks[1:])
 
-cap = cv2.VideoCapture(0) #"videos/pushups-front1.mp4"
+cap = cv2.VideoCapture("videos/pushups-front1.mp4") #"videos/pushups-front1.mp4"
 counter = 0
 current_stage = ' '
 
@@ -48,43 +50,47 @@ with mp_pose.Pose(min_detection_confidence=0.5, min_tracking_confidence=0.5) as 
                                 mp_drawing.DrawingSpec(color=(245,66,230), thickness=2, circle_radius=2) 
                                  )               
         
-        cv2.imshow('Mediapipe Feed', image)
         
-        try:
-            row = np.array([[res.x, res.y, res.z, res.visibility] for res in results.pose_landmarks.landmark]).flatten().tolist()
-            X = pd.DataFrame([row], columes = landmark[1:])
-            body_language_class = model.predict(X)[0]
-            body_language_prob = model.predict_proba(X)[0]
-            print(body_language_class,body_language_prob)
+        
+        # try:
+        row = np.array([[res.x, res.y, res.z, res.visibility] for res in results.pose_landmarks.landmark]).flatten().tolist()
+        X = pd.DataFrame([row], columns=landmarks[1:])
+        body_language_class = model.predict(X)[0]
+        body_language_prob = model.predict_proba(X)[0]
+        print(body_language_class,body_language_prob)
             
-            if body_language_class == 'down' and body_language_prob[body_language_prob.argmax()] >= .7:
-                current_stage = 'down'
-            elif current_stage == 'down' and body_language_class == 'up' and body_language_prob[body_language_prob.argmax()] >= .7:
-                current_stage = 'up'
-                counter +=1
-                print(current_stage)
+        if body_language_class == 'down' and body_language_prob[body_language_prob.argmax()] >= .7:
+            current_stage = 'down'
+        elif current_stage == 'down' and body_language_class == 'up' and body_language_prob[body_language_prob.argmax()] >= .7:
+            current_stage = 'up'
+            counter +=1
+            print(current_stage)
                 
             #get status box    
-            cv2.rectangle(image, (0,0), (250, 60), (245, 117, 16), -1)
+        cv2.rectangle(image, (0,0), (250, 60), (245, 117, 16), -1)
             #display class
-            cv2.putText(image, 'CLASS', (95,12), cv2.FONT_HERSHEY_SIMPLEX, 0.5, (0,0,0), 1,  cv2.LINE_AA)
-            cv2.putText(image, body_language_class.spilt(' ')[0], (95,40), cv2.FONT_HERSHEY_SIMPLEX, 1, (255,255,255), 2,  cv2.LINE_AA)
+        cv2.putText(image, "CLASS", (95,12), cv2.FONT_HERSHEY_SIMPLEX, 0.5, (0,0,0), 1,  cv2.LINE_AA)
+        cv2.putText(image, body_language_class.split(' ')[0], (95,40), cv2.FONT_HERSHEY_SIMPLEX, 1, (255,255,255), 2,  cv2.LINE_AA)
             
             #display probability
-            cv2.putText(image, 'PROB', (15,12), cv2.FONT_HERSHEY_SIMPLEX, 0.5, (0,0,0), 1,  cv2.LINE_AA)
-            cv2.putText(image, str(round(body_language_prob[np.argmax(body_language_prob)],2)), (10,40), cv2.FONT_HERSHEY_SIMPLEX, 1, (255,255,255), 2, cv2.LINE_AA)
+        cv2.putText(image, "PROB", (15,12), cv2.FONT_HERSHEY_SIMPLEX, 0.5, (0,0,0), 1,  cv2.LINE_AA)
+        cv2.putText(image, str(round(body_language_prob[np.argmax(body_language_prob)],2)), (10,40), cv2.FONT_HERSHEY_SIMPLEX, 1, (255,255,255), 2, cv2.LINE_AA)
             
             #display conter
-            cv2.putText(image, 'COUNT', (180,12), cv2.FONT_HERSHEY_SIMPLEX, 0.5, (0,0,0), 1,  cv2.LINE_AA)
-            cv2.putText(image, str(counter), (175,40), cv2.FONT_HERSHEY_SIMPLEX, 1, (255,255,255), 2,  cv2.LINE_AA)
+        cv2.putText(image, "COUNT", (180,12), cv2.FONT_HERSHEY_SIMPLEX, 0.5, (0,0,0), 1,  cv2.LINE_AA)
+        cv2.putText(image, str(counter), (175,40), cv2.FONT_HERSHEY_SIMPLEX, 1, (255,255,255), 2,  cv2.LINE_AA)
             
-        except Exception as e:
-            pass
+            
+        # except Exception as e:
+        #     pass
         
         
+        
+        cv2.imshow('count pushups', image)
         
         if cv2.waitKey(10) & 0xFF == ord('q'):
             break
+        
         
 
     

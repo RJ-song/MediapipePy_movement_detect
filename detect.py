@@ -11,7 +11,7 @@ mp_drawing = mp.solutions.drawing_utils
 mp_pose = mp.solutions.pose
 fieldnames = ['x', 'y', 'z', 'visibility']
 
-cap = cv2.VideoCapture(0)
+cap = cv2.VideoCapture("videos\pushups-front3.mp4")
 
 
 def export_landmarks(results, action) :
@@ -49,10 +49,6 @@ with mp_pose.Pose(min_detection_confidence=0.5, min_tracking_confidence=0.5) as 
         
         
         # print(results.pose_landmarks)
-        
-        text = "test";
-        cv2.putText(image, text, (100, 50), cv2.FONT_HERSHEY_SIMPLEX,
-    1, (0, 255, 255), 1, cv2.LINE_AA)
         
         
         cv2.imshow('detect', image)

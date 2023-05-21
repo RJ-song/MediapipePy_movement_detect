@@ -11,7 +11,7 @@ mp_drawing = mp.solutions.drawing_utils
 mp_pose = mp.solutions.pose
 fieldnames = ['x', 'y', 'z', 'visibility']
 
-cap = cv2.VideoCapture("videos\pushups-front3.mp4")
+cap = cv2.VideoCapture("videos\squat2.mp4")
 
 
 def export_landmarks(results, action) :
@@ -19,7 +19,7 @@ def export_landmarks(results, action) :
            keypoints = np.array([[res.x, res.y, res.z, res.visibility] for res in results.pose_landmarks.landmark]).flatten().tolist()
            keypoints.insert(0,action)
            
-           with open('outputs/pushups-front1.csv', mode='a',newline='') as f:
+           with open('outputs/squats.csv', mode='a',newline='') as f:
                csv_writer=csv.writer(f,delimiter=',', quotechar='"', quoting = csv.QUOTE_MINIMAL)
                csv_writer.writerow(keypoints)
         except Exception as e:

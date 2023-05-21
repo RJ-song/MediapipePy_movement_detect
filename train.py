@@ -9,7 +9,7 @@ from sklearn.ensemble import RandomForestClassifier, GradientBoostingClassifier
 from sklearn.metrics import accuracy_score, precision_score, recall_score
 import pickle
 
-df = pd.read_csv('outputs/pushups-front1.csv')
+df = pd.read_csv('outputs/squats.csv')
 df.head()
 df.tail()
 df[df['class']=='up']
@@ -51,5 +51,5 @@ yhat=fit_models['rf'].predict(X_test)
 print(yhat[:10])
 print(y_test)
 
-with open('models\pushup_front.pkl', 'wb') as f:
+with open('models\squats.pkl', 'wb') as f:
     pickle.dump(fit_models['rf'],f)

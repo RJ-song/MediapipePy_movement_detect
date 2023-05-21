@@ -19,7 +19,7 @@ import csv
 mp_drawing = mp.solutions.drawing_utils
 mp_pose = mp.solutions.pose
 
-with open('models\pushup_front.pkl', 'rb') as f:
+with open('models\squats.pkl', 'rb') as f:
     model = pickle.load(f)
     
 landmarks = ['class']
@@ -27,7 +27,7 @@ for val in range(1,33+1):
     landmarks += ['x{}'.format(val), 'y{}'.format(val), 'z{}'.format(val), 'v{}'.format(val),]
 # X = pd.DataFrame([row], columns = landmarks[1:])
 
-cap = cv2.VideoCapture("videos/pushups-front1.mp4") #"videos/pushups-front1.mp4"
+cap = cv2.VideoCapture("videos/squat.mp4") #"videos/pushups-front1.mp4"
 counter = 0
 current_stage = ' '
 
@@ -86,7 +86,7 @@ with mp_pose.Pose(min_detection_confidence=0.5, min_tracking_confidence=0.5) as 
         
         
         
-        cv2.imshow('count pushups', image)
+        cv2.imshow('count squats', image)
         
         if cv2.waitKey(10) & 0xFF == ord('q'):
             break

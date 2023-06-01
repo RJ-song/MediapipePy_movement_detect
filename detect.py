@@ -11,7 +11,7 @@ mp_drawing = mp.solutions.drawing_utils
 mp_pose = mp.solutions.pose
 fieldnames = ['x', 'y', 'z', 'visibility']
 
-cap = cv2.VideoCapture("videos\squat2.mp4")
+cap = cv2.VideoCapture("videos\plank.mp4")
 
 
 def export_landmarks(results, action) :
@@ -19,7 +19,7 @@ def export_landmarks(results, action) :
            keypoints = np.array([[res.x, res.y, res.z, res.visibility] for res in results.pose_landmarks.landmark]).flatten().tolist()
            keypoints.insert(0,action)
            
-           with open('outputs/squats.csv', mode='a',newline='') as f:
+           with open('outputs/plank.csv', mode='a',newline='') as f:
                csv_writer=csv.writer(f,delimiter=',', quotechar='"', quoting = csv.QUOTE_MINIMAL)
                csv_writer.writerow(keypoints)
         except Exception as e:
@@ -58,16 +58,16 @@ with mp_pose.Pose(min_detection_confidence=0.5, min_tracking_confidence=0.5) as 
             landmarks += ['x{}'.format(val), 'y{}'.format(val), 'z{}'.format(val), 'v{}'.format(val),]
 
         #write first row
-        # with open('outputs/jumpingjacks.csv', mode = 'w' ,newline='') as f:
+        # with open('outputs/plank.csv', mode = 'w' ,newline='') as f:
         #     csv_writer=csv.writer(f,delimiter=',', quotechar='"', quoting = csv.QUOTE_MINIMAL)
         #     csv_writer.writerow(landmarks)
         
         
         k = cv2.waitKey(10)
         if k == 117 :
-            export_landmarks(results, 'up')
+            export_landmarks(results, '1')
         if k == 100 :
-            export_landmarks(results, 'down')
+            export_landmarks(results, '0')
         
         
         

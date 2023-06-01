@@ -27,7 +27,7 @@ for val in range(1,33+1):
     landmarks += ['x{}'.format(val), 'y{}'.format(val), 'z{}'.format(val), 'v{}'.format(val),]
 # X = pd.DataFrame([row], columns = landmarks[1:])
 
-cap = cv2.VideoCapture("videos/squat.mp4") #"videos/pushups-front1.mp4"
+cap = cv2.VideoCapture("videos/squat2.mp4") #"videos/pushups-front1.mp4"
 counter = 0
 current_stage = ' '
 
@@ -83,10 +83,11 @@ with mp_pose.Pose(min_detection_confidence=0.5, min_tracking_confidence=0.5) as 
             
         # except Exception as e:
         #     pass
+
         
         
         
-        cv2.imshow('count squats', image)
+        cv2.imshow('model test conut', image)
         
         if cv2.waitKey(10) & 0xFF == ord('q'):
             break

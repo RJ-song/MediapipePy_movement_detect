@@ -11,7 +11,7 @@ mp_drawing = mp.solutions.drawing_utils
 mp_pose = mp.solutions.pose
 fieldnames = ['x', 'y', 'z', 'visibility']
 
-cap = cv2.VideoCapture("videos\plank.mp4")
+cap = cv2.VideoCapture("videos\plank2.mp4")
 
 
 def export_landmarks(results, action) :
@@ -64,10 +64,10 @@ with mp_pose.Pose(min_detection_confidence=0.5, min_tracking_confidence=0.5) as 
         
         
         k = cv2.waitKey(10)
-        if k == 117 :
-            export_landmarks(results, '1')
-        if k == 100 :
-            export_landmarks(results, '0')
+        if k == 116 :
+            export_landmarks(results, 'T')
+        if k == 102 :
+            export_landmarks(results, 'F')
         
         
         

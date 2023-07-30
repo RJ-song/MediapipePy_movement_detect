@@ -9,10 +9,10 @@ from sklearn.ensemble import RandomForestClassifier, GradientBoostingClassifier
 from sklearn.metrics import accuracy_score, precision_score, recall_score
 import pickle
 
-df = pd.read_csv('outputs/squats.csv')
+df = pd.read_csv('outputs/plank.csv')
 df.head()
 df.tail()
-df[df['class']=='up']
+df[df['class']=='T']
 
 X=df.drop('class',axis=1)
 y=df['class']
@@ -44,12 +44,12 @@ fit_models['rf'].predict(X_test)
 for algo, model in fit_models.items():
     yhat= model.predict(X_test)
     print(algo, accuracy_score(y_test.values, yhat),
-          precision_score(y_test.values, yhat, average= "binary", pos_label="up"),
-          recall_score(y_test.values, yhat, average= "binary", pos_label="up")
+          precision_score(y_test.values, yhat, average= "binary", pos_label="T"),
+          recall_score(y_test.values, yhat, average= "binary", pos_label="T")
           )
 yhat=fit_models['rf'].predict(X_test)
 print(yhat[:10])
 print(y_test)
 
-with open('models\squats.pkl', 'wb') as f:
+with open('models/pickle/plank.pkl', 'wb') as f:
     pickle.dump(fit_models['rf'],f)

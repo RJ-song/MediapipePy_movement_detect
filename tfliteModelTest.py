@@ -29,6 +29,8 @@ for val in range(1,33+1):
 # X = pd.DataFrame([row], columns = landmarks[1:])
 
 cap = cv2.VideoCapture("videos/pushups-front1.mp4") #"videos/pushups-front1.mp4"
+
+
 counter = 0
 current_stage = ' '
 

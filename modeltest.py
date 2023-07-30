@@ -19,7 +19,7 @@ import csv
 mp_drawing = mp.solutions.drawing_utils
 mp_pose = mp.solutions.pose
 
-with open('models\squats.pkl', 'rb') as f:
+with open('models\pickle\squats.pkl', 'rb') as f:
     model = pickle.load(f)
     
 landmarks = ['class']
@@ -27,10 +27,16 @@ for val in range(1,33+1):
     landmarks += ['x{}'.format(val), 'y{}'.format(val), 'z{}'.format(val), 'v{}'.format(val),]
 # X = pd.DataFrame([row], columns = landmarks[1:])
 
-cap = cv2.VideoCapture("videos/squat2.mp4") #"videos/pushups-front1.mp4"
+cap = cv2.VideoCapture("videos/squat-animated.mp4") #"videos/pushups-front1.mp4"
+height = cap.get(cv2.CAP_PROP_FRAME_HEIGHT)
+width = cap.get(cv2.CAP_PROP_FRAME_WIDTH)
+fps = cap.get(cv2.CAP_PROP_FPS)
 counter = 0
 current_stage = ' '
+#output videos
 
+# out = cv2.VideoWriter('output_videos\pushup.avi', cv2.VideoWriter_fourcc('M','J','P','G'), fps, (int(height),int(width)))
+# cv2.VideoWriter_fourcc('P','I','M','1')
 with mp_pose.Pose(min_detection_confidence=0.5, min_tracking_confidence=0.5) as pose:
     while cap.isOpened():
         ret, frame = cap.read()
@@ -39,6 +45,10 @@ with mp_pose.Pose(min_detection_confidence=0.5, min_tracking_confidence=0.5) as 
         image = cv2.cvtColor(frame, cv2.COLOR_BGR2RGB)
         image.flags.writeable = False
       
+        # frame = cv2.flip(frame,0)
+
+        # write the flipped frame
+        
         # Make detection
         results = pose.process(image)
     
@@ -87,14 +97,18 @@ with mp_pose.Pose(min_detection_confidence=0.5, min_tracking_confidence=0.5) as 
         
         
         
-        cv2.imshow('model test conut', image)
-        
+        try:
+            cv2.imshow('model test conut', image)
+            # out.write(image)
+        except Exception as e:
+            break
         if cv2.waitKey(10) & 0xFF == ord('q'):
             break
         
         
 
     
-            
+   
     cap.release()
+    # out.release()
     cv2.destroyAllWindows()

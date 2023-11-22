@@ -11,10 +11,10 @@ mp_drawing = mp.solutions.drawing_utils
 mp_pose = mp.solutions.pose
 fieldnames = ['x', 'y', 'z', 'visibility']
 
-cap = cv2.VideoCapture("videos\squat2.mp4")
+cap = cv2.VideoCapture("videos\pushup_side4.mp4")
 
 # Define the output video path
-output_path = os.path.join("dotDisplay", "output_video_dot.mp4")
+output_path = os.path.join("Display", "pushup_side_dot.mp4")
 
 # Define the codec and create VideoWriter object
 fourcc = cv2.VideoWriter_fourcc(*'mjpg')
@@ -46,7 +46,7 @@ with mp_pose.Pose(min_detection_confidence=0.5, min_tracking_confidence=0.5) as 
         for landmark in results.pose_landmarks.landmark:
             if landmark.visibility > 0.5:
                 cx, cy = int(landmark.x * width), int(landmark.y * height)
-                cv2.circle(image, (cx, cy), radius=2, color=(245, 117, 66), thickness=2)
+                cv2.circle(image, (cx, cy), radius=5, color=(245, 117, 66), thickness=5)
         
         # Draw the connections between the landmarks (this will connect adjacent landmarks)
         # mp_drawing.draw_landmarks(image, results.pose_landmarks, mp_pose.POSE_CONNECTIONS,

@@ -11,7 +11,7 @@ mp_drawing = mp.solutions.drawing_utils
 mp_pose = mp.solutions.pose
 fieldnames = ['x', 'y', 'z', 'visibility']
 
-cap = cv2.VideoCapture("videos\plank2.mp4")
+cap = cv2.VideoCapture("videos\plank03.mp4")
 
 
 def export_landmarks(results, action) :
@@ -57,17 +57,17 @@ with mp_pose.Pose(min_detection_confidence=0.5, min_tracking_confidence=0.5) as 
         for val in range(1,33+1):
             landmarks += ['x{}'.format(val), 'y{}'.format(val), 'z{}'.format(val), 'v{}'.format(val),]
 
-        #write first row
-        # with open('outputs/plank.csv', mode = 'w' ,newline='') as f:
+        # write first row
+        # with open('outputs/pushup_side.csv', mode = 'w' ,newline='') as f:
         #     csv_writer=csv.writer(f,delimiter=',', quotechar='"', quoting = csv.QUOTE_MINIMAL)
         #     csv_writer.writerow(landmarks)
         
         
         k = cv2.waitKey(10)
         if k == 116 :
-            export_landmarks(results, 'T')
-        if k == 102 :
-            export_landmarks(results, 'F')
+            export_landmarks(results, 'true')
+        if k == 110 :
+            export_landmarks(results, 'N')
         
         
         

@@ -1,14 +1,3 @@
-from sklearn.metrics import accuracy_score, precision_score, recall_score
-import pickle
-
-import cv2
-import mediapipe as mp
-import numpy as np
-import pandas as pd
-from matplotlib import pyplot as plt
-from sklearn.svm import SVC
-import csv
-
 from sklearn.model_selection import train_test_split
 from sklearn.pipeline import make_pipeline
 
@@ -26,6 +15,7 @@ import pandas as pd
 from matplotlib import pyplot as plt
 from sklearn.svm import SVC
 import csv
+import time
 
 mp_drawing = mp.solutions.drawing_utils
 mp_pose = mp.solutions.pose
@@ -38,10 +28,16 @@ for val in range(1,33+1):
     landmarks += ['x{}'.format(val), 'y{}'.format(val), 'z{}'.format(val), 'v{}'.format(val),]
 # X = pd.DataFrame([row], columns = landmarks[1:])
 
-cap = cv2.VideoCapture("videos/plank.mp4") #"videos/pushups-front1.mp4"
+cap = cv2.VideoCapture("videos/plank02.mp4") #"videos/pushups-front1.mp4"
+height = cap.get(cv2.CAP_PROP_FRAME_HEIGHT)
+width = cap.get(cv2.CAP_PROP_FRAME_WIDTH)
+fps = cap.get(cv2.CAP_PROP_FPS)
 counter = 0
 current_stage = ' '
+#output videos
 
+# out = cv2.VideoWriter('output_videos\pushup.avi', cv2.VideoWriter_fourcc('M','J','P','G'), fps, (int(height),int(width)))
+# cv2.VideoWriter_fourcc('P','I','M','1')
 with mp_pose.Pose(min_detection_confidence=0.5, min_tracking_confidence=0.5) as pose:
     while cap.isOpened():
         ret, frame = cap.read()
@@ -50,6 +46,10 @@ with mp_pose.Pose(min_detection_confidence=0.5, min_tracking_confidence=0.5) as 
         image = cv2.cvtColor(frame, cv2.COLOR_BGR2RGB)
         image.flags.writeable = False
       
+        # frame = cv2.flip(frame,0)
+
+        # write the flipped frame
+        
         # Make detection
         results = pose.process(image)
     
@@ -58,7 +58,7 @@ with mp_pose.Pose(min_detection_confidence=0.5, min_tracking_confidence=0.5) as 
         image = cv2.cvtColor(image, cv2.COLOR_RGB2BGR)
         mp_drawing.draw_landmarks(image, results.pose_landmarks, mp_pose.POSE_CONNECTIONS,
                                 mp_drawing.DrawingSpec(color=(245,117,66), thickness=2, circle_radius=2), 
-                                mp_drawing.DrawingSpec(color=(0, 0, 255), thickness=2, circle_radius=2) 
+                                mp_drawing.DrawingSpec(color=(173, 197, 235), thickness=2, circle_radius=2) 
                                  )               
         
         
@@ -69,21 +69,14 @@ with mp_pose.Pose(min_detection_confidence=0.5, min_tracking_confidence=0.5) as 
         body_language_class = model.predict(X)[0]
         body_language_prob = model.predict_proba(X)[0]
         print(body_language_class,body_language_prob)
-            
-        if body_language_class == 'T' and body_language_prob[body_language_prob.argmax()] >= .7:
-            current_stage = 'correct'
-            mp_drawing.draw_landmarks(image, results.pose_landmarks, mp_pose.POSE_CONNECTIONS,
-                                mp_drawing.DrawingSpec(color=(245,117,66), thickness=2, circle_radius=2), 
-                                mp_drawing.DrawingSpec(color=(255, 208, 0), thickness=2, circle_radius=2) 
-                                 )
+        start_time = None
+        
+        if body_language_class == 'true' and body_language_prob[body_language_prob.argmax()] >= 0.7:
+            if start_time is None:  # 如果計時未開始，則開始計時
+                start_time = time.time()
+            current_stage = 'true'
         else:
-            current_stage = 'incorrect'
-            mp_drawing.draw_landmarks(image, results.pose_landmarks, mp_pose.POSE_CONNECTIONS,
-                                mp_drawing.DrawingSpec(color=(245,117,66), thickness=2, circle_radius=2), 
-                                mp_drawing.DrawingSpec(color=(0, 0, 255), thickness=2, circle_radius=2) 
-                                 )
-            
-                
+            time.sleep()
             #get status box    
         cv2.rectangle(image, (0,0), (250, 60), (245, 117, 16), -1)
             #display class
@@ -105,14 +98,18 @@ with mp_pose.Pose(min_detection_confidence=0.5, min_tracking_confidence=0.5) as 
         
         
         
-        cv2.imshow('model test conut', image)
-        
+        try:
+            cv2.imshow('model test conut', image)
+            # out.write(image)
+        except Exception as e:
+            break
         if cv2.waitKey(10) & 0xFF == ord('q'):
             break
         
         
 
     
-            
+   
     cap.release()
+    # out.release()
     cv2.destroyAllWindows()

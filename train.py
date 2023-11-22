@@ -12,7 +12,7 @@ import pickle
 df = pd.read_csv('outputs/plank.csv')
 df.head()
 df.tail()
-df[df['class']=='T']
+df[df['class']=='true']
 
 X=df.drop('class',axis=1)
 y=df['class']
@@ -44,8 +44,8 @@ fit_models['rf'].predict(X_test)
 for algo, model in fit_models.items():
     yhat= model.predict(X_test)
     print(algo, accuracy_score(y_test.values, yhat),
-          precision_score(y_test.values, yhat, average= "binary", pos_label="T"),
-          recall_score(y_test.values, yhat, average= "binary", pos_label="T")
+          precision_score(y_test.values, yhat, average= "binary", pos_label="true"),
+          recall_score(y_test.values, yhat, average= "binary", pos_label="true")
           )
 yhat=fit_models['rf'].predict(X_test)
 print(yhat[:10])

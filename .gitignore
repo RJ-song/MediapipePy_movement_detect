@@ -3,4 +3,4 @@ __pycache__/
 test/
 videos/
 sport_detection/tflite_detect/
-tfliteModelTest.py
+/tfliteModelTest.py

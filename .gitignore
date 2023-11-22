@@ -1,5 +1,6 @@
 outputs/
 __pycache__/
-test
-videos
+test/
+videos/
+sport_detection/tflite_detect/
 tfliteModelTest.py

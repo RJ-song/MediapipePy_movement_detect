@@ -28,7 +28,7 @@ for val in range(1,33+1):
     landmarks += ['x{}'.format(val), 'y{}'.format(val), 'z{}'.format(val), 'v{}'.format(val),]
 # X = pd.DataFrame([row], columns = landmarks[1:])
 
-cap = cv2.VideoCapture("videos/plank02.mp4") #"videos/pushups-front1.mp4"
+cap = cv2.VideoCapture(0) #"videos/plank02.mp4"
 height = cap.get(cv2.CAP_PROP_FRAME_HEIGHT)
 width = cap.get(cv2.CAP_PROP_FRAME_WIDTH)
 fps = cap.get(cv2.CAP_PROP_FPS)
